@@ -266,6 +266,98 @@ select count(a.zh )
   from d_dg_fhzxx a
  where to_char(a.rq, 'yyyymmdd') = '20160601';
  
+------------------------------------------2060816----------------------------------------------
+select a.zh, a.khbh, a.khr, (a.ye * (-1)) ye
+  from d_dg_fhzxx a, d_user_account_change b, d_sum_code c
+ where a.zh = b.zh
+   and c.sjdm in ('dgbzj', 'ndgck')
+   and c.tjdm = to_number(a.kmh)
+   and b.zgbh = '12150'
+   and to_char(a.rq, 'yyyymmdd') = '20160531'
+   and a.rq >= ksrq
+   and a.rq <= jsrq;
+
+-----
+select a.zh, a.khbh
+  from (select * from rep.d_dg_fhzxx t3 where to_char(t3.rq, 'yyyymmdd') = '20160101' and t3.rq >= ksrq  and t3.rq <= jsrq) a                                       
+  LEFT JOin (select * from rep.d_user_account_change t1 where t1.zgbh = '999999') b                             
+    on a.zh = b.zh
+  left join (select * from rep.d_sum_code t2 where t2.sjdm in ('dgbzj', 'ndgck')) c 
+         on c.tjdm = to_number(a.kmh)              
+   ---and b.zgbh = '12150'
+   and to_char(a.rq, 'yyyymmdd') = '20160101'
+   and a.rq >= ksrq
+   and a.rq <= jsrq;
+
+-----
+select t1.zgbh, count(*)
+  from rep.d_user_account_change t1
+  where t1.zgbh ='999999'
+ group by t1.zgbh;
+
+
+---create table rep.azh as
+select a.zh, a.khbh , a.khr, (a.ye * (-1)) ye
+  from (select t1.rq,t1.zh,t1.khbh,t1.kmh from rep.d_dg_fhzxx t1 where to_char(t1.rq, 'yyyymmdd') = '20160531')a,
+       (select t2.zh,t2.ksrq,t2.jsrq from rep.d_user_account_change t2 where t2.zgbh = '999999') b,
+       (select t3.tjdm from rep.d_sum_code t3 where t3.sjdm in ('dgbzj', 'ndgck') )c
+ where a.zh = b.zh
+   and c.tjdm = to_number(a.kmh)
+   ---and b.zgbh = '12150'
+   and a.rq >= b.ksrq
+   and a.rq <= b.jsrq;
+
+select *
+  from rep.d_accman_sub_sum t1
+ where to_char(t1.rq, 'yyyymmdd')  in ('20160601','20160602'，'20160814')
+   and t1.zgbh = '12150'
+   order by t1.rq,t1.tjdm;
+
+select * from rep.D_USER_ACCOUNT_CHANGE_TEST2 t1 where t1.zgbh ='12150' ;
+
+
+
+--- create table rep.azh2 as
+selECT t1.zh,count( t1.zh) nu1
+  from rep.d_user_account_change t1
+ where t1.zh in (select t.zh from rep.azh t)
+ group by t1.zh
+ order by nu1;
+
+select t1.zh,t3.aa10dpnok,t3.aa10name,t3.aa10cmng
+  from rep.azh2 t1
+  left join ods.adpf10 t2
+    on t1.zh = t2.ad10acno
+  left join ods.aapf10 t3
+    on t2.ad10id = t3.aa10acid
+   where t1.nu1 = 1
+   and  t3.aa10dpnok = '12150';
+
+
+select * from rep.azh2 t1 where t1.nu1 = 1;
+
+--- create table rep.d_user_account_change_0816 as
+select * from rep.d_user_account_change;
+
+
+select * from rep.d_user_account_change t1 where t1.zh = '121100124300010627';
+ 
+select t1.*, t3.khmc
+  from rep.azh t1
+  left join i_khxx_new t3
+    on t1.khbh = t3.khbh
+ where t1.zh in (select t2.zh from rep.azh2 t2 where t2.nu1 = 1)
+ order by t1.zh;
+
+select * from rep.d_user_account_change t1;
+
+select t2.*, t1.khr, t1.ye
+  from rep.azh t1
+  left join rep.d_user_account_change t2
+    on t1.zh = t1.zh;
+
+select * from rep.d_user_change t2 where t2.zgbh='1521';
+
 
  
  
