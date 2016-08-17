@@ -1,10 +1,17 @@
 ----oracle 操作日志查询
 select * from v$logfile;
+select * from v$log;
 select * from v$sql;
 desc v$sql;
 desc v$sqlarea;
 select * from v$sqlarea;
 select * from v$sqltext;
+
+----
+----- 查看建表时间
+select t1.*
+  from User_Objects t1
+ where lower(t1.OBJECT_NAME) like 'd_user_account_change%';
 
 ---- 查找字段
 select table_name, column_name
@@ -25,12 +32,16 @@ select
      "PROGRAM_ID"
       -- "LAST_ACTIVE_TIME"   
   from v$sql t1
- where to_char(to_timestamp(FIRST_LOAD_TIME, 'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd') >= 20160707
-   and to_char(to_timestamp(FIRST_LOAD_TIME, 'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd') <= 20160709
- ---  and t1.SQL_TEXT like 'insert%' or t1.SQL_TEXT like 'update%'
+ where to_char(to_timestamp(FIRST_LOAD_TIME, 'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd') >= 20160531
+   and to_char(to_timestamp(FIRST_LOAD_TIME, 'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd') <= 20160603
+   and t1.SQL_TEXT like 'insert%' or t1.SQL_TEXT like 'update%'
    order by FIRST_LOAD_TIME,SQL_TEXT;
 
---update B_M_SYS_USER set PASSWORD='123456' where ACCOUNT='1998'
+
+----系统密码重置
+update B_M_SYS_USER set PASSWORD='E10ADC3949BA59ABBE56E057F20F883E' where ACCOUNT='1998'
+
+
 
 select * from B_M_SYS_USER  t where   t.account ='1998' for update;
 
@@ -200,3 +211,18 @@ select khbh,
            and a.zgbh = b.zgbh
            and bmdm != '120'
          order by a.zh, ca10cno)
+
+-----数据恢复
+ create table rep.d_user_account_change_recover
+ as
+ select * from rep.d_user_account_change
+ as of timestamp  to_timestamp('2016-05-20/11:47:47','yyyy-mm-dd hh24:mi:ss');
+ 
+ select * from v$archived_log;
+ SELECT * FROM v$loghist;
+ SELECT name,log_mode FROM v$database;
+select * from v$log_history ;
+
+select * from v$sql;
+select * from v$recovery_file_dest;
+select * from v$datafile;
