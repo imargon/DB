@@ -1,4 +1,5 @@
 ----oracle 操作日志查询
+
 select * from v$logfile;
 select * from v$log;
 select * from v$sql;
@@ -15,14 +16,10 @@ SELECT * FROM V$NLS_PARAMETERS;
 select * from sys.dbms_lob;
 select * from sys.dbms_output;
 ----- 查看建表时间
-select t1.*
-  from User_Objects t1
- where lower(t1.OBJECT_NAME) like 'd_user_account_change%';
+select t1.* from User_Objects t1 where lower(t1.OBJECT_NAME) like 'd_user_account_change%';
 
 ---- 查找字段
-select table_name, column_name
-  from user_tab_columns
- where column_name = 'DFSUM';
+select table_name, column_name from user_tab_columns  where column_name = 'DFSUM';
 
 select * from v$sql
 where to_char(to_timestamp(FIRST_LOAD_TIME, 'yyyy-mm-dd hh24:mi:ss'),'yyyymmdd') >= 20160301
