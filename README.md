@@ -1,2 +1,0 @@
-# OracleSQL
-Oracle Daily
