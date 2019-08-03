@@ -1,57 +1,65 @@
-----  ÈÕÆÚÀàÐÍ×ª»»
+----  æ—¥æœŸç±»åž‹è½¬æ¢
 to_char(sysdate,'YYYY-MM-DD HH24:MI:SS');
-----Oracle¼ì²é·ÖÇø
- select count(1) 
-   from ALL_TAB_PARTITIONS
+
+select userenv('language') from dual;
+select * from sys.nls_database_parameters;
+select * from sys.nls_session_parameters;
+
+SELECT * FROM V$NLS_PARAMETERS;
+select * from sys.dbms_lob;
+select * from sys.dbms_output;
+
+----Oracleæ£€æŸ¥åˆ†åŒº
+ select count(1)  from ALL_TAB_PARTITIONS
   where table_name = p_tgt_tbl_name
     and PARTITION_NAME = v_prt_name;
-----Âë±í
+----ç è¡¨
  Select * From  ict_s_dic Where opttype = 'ID_TYPE';
-decode ÄÚ²¿×Ö¶ÎÆ´½Ó
-decode(Date_Nextvisit,'','ÏÂ´Î¸ú½øÊ±¼ä£º['||Date_Nextvisit||']') RMK1,
+decode å†…éƒ¨å­—æ®µæ‹¼æŽ¥
+decode(Date_Nextvisit,'','ä¸‹æ¬¡è·Ÿè¿›æ—¶é—´ï¼š['||Date_Nextvisit||']') RMK1,
 
-----Æ´½Ó×Ö¶Î,É¾³ý±í
+----æ‹¼æŽ¥å­—æ®µ,åˆ é™¤è¡¨
 SELECT 'DROP TABLE '||TABLE_NAME||';' FROM TABS   WHERE TABLE_NAME LIKE 'M_ICT%';
 Select * From tabs ;
-----½»»»·ÖÇø£¬·ÖÇø½»»»ºóÊý¾ÝÊÇ·ñ½»»»£¿
+----äº¤æ¢åˆ†åŒºï¼Œåˆ†åŒºäº¤æ¢åŽæ•°æ®æ˜¯å¦äº¤æ¢ï¼Ÿ
 'ALTER TABLE '|| p_tgt_tbl_name ||' EXCHANGE PARTITION '||v_prt_name||' WITH TABLE '||p_src_tbl_name;
-----²éÑ¯Ä³±íÊÇ·ñ´æÔÚ
+----æŸ¥è¯¢æŸè¡¨æ˜¯å¦å­˜åœ¨
 select count(1) from tabs
  where table_name = p_src_tbl_name;
-----ÖØ½¨Ë÷Òý
+----é‡å»ºç´¢å¼•
 ALTER index ind_id_idx rebuild
-----´´½¨Ë÷Òýnologging
+----åˆ›å»ºç´¢å¼•nologging
 create index I_ICT_CUST_INFO__0 on ICT_CUST_INFO_20141222 (CUST_NO)
  nologging;
-----²éÑ¯·ÖÇøÄÚÊý¾Ý
+----æŸ¥è¯¢åˆ†åŒºå†…æ•°æ®
 select  count(1) from stg_ict_trade_info partition(ICT_PRT_2014005);
 Select * From User_Ind_Partitions;
 Select * From User_Part_Indexes;
 
------²éÑ¯Ë÷Òý
+-----æŸ¥è¯¢ç´¢å¼•
 select index_name from ALL_INDEXES WHERE TABLE_NAME=p_src_tbl_name;
------²éÑ¯·ÖÇø
+-----æŸ¥è¯¢åˆ†åŒº
 select * from ALL_TAB_PARTITIONS 
   where table_name = p_tgt_tbl_name and PARTITION_NAME = v_prt_name;
------²éÑ¯±íÃû  
+-----æŸ¥è¯¢è¡¨å  
 select * from tabs where table_name = p_tgt_tbl_name;
------Çå¿Õ±í·ÖÇøÊý¾Ý
+-----æ¸…ç©ºè¡¨åˆ†åŒºæ•°æ®
 'ALTER TABLE '||p_tgt_tbl_name||' TRUNCATE PARTITION ' || v_prt_name;
------Ôö¼Ó±í·ÖÇø
+-----å¢žåŠ è¡¨åˆ†åŒº
 'ALTER TABLE '||p_tgt_tbl_name||' ADD PARTITION ' || v_prt_name||' VALUES LESS THAN (''' ||v_monthend||''') TABLESPACE ICLIENT_O_DATA01 ';
------ÖØ½¨Ë÷Òý
+-----é‡å»ºç´¢å¼•
 'ALTER INDEX '||cur_ind.index_name|| ' REBUILD PARALLEL 128 COMPUTE STATISTICS NOLOGGING';
------½»»»·ÖÇø
+-----äº¤æ¢åˆ†åŒº
 'ALTER TABLE '|| p_tgt_tbl_name ||' EXCHANGE PARTITION '||v_prt_name||' WITH TABLE '||p_src_tbl_name||' INCLUDING INDEXES';
  
------oralce´´½¨Í¬Òå´Ê------------
+-----oralceåˆ›å»ºåŒä¹‰è¯------------
  
 create or replace public SYNONYM ICT_ORG_BPH  for iclientodata.ICT_ORG_BPH; 
  
------oracle ¸³È¨ÏÞ 
-grant select, insert, update, delete on ICT_ORG_BPH to ICLIENTOOPR;   --¸³È¨ÏÞ
+-----oracle èµ‹æƒé™ 
+grant select, insert, update, delete on ICT_ORG_BPH to ICLIENTOOPR;   --èµ‹æƒé™
  
----------------DBA²é¿´±í¿Õ¼ä------------
+---------------DBAæŸ¥çœ‹è¡¨ç©ºé—´------------
 select a.tablespace_name,
        a.bytes / 1024 / 1024 / 1024 "Sum G",
       (a.bytes - b.bytes) / 1024 / 1024 / 1024 "used G",
@@ -67,39 +75,39 @@ where a.tablespace_name = b.tablespace_name
 order by ((a.bytes - b.bytes) / a.bytes) desc
 
 -------------------------------------------------
---oracle Éú³ÉÉ¾±íÓï¾ä£¬
+--oracle ç”Ÿæˆåˆ è¡¨è¯­å¥ï¼Œ
 SELECT 'DROP TABLE '||TABLE_NAME||';' FROM TABS   WHERE TABLE_NAME LIKE 'M_ICT%'
---²éÑ¯oracle ÖÐICT¿ªÍ·µÄ
+--æŸ¥è¯¢oracle ä¸­ICTå¼€å¤´çš„
 SELECT * FROM  tabs  WHERE TABLE_NAME LIKE 'ICT%'
 
-----oracle ±í·ÖÎöÓï¾ä
+----oracle è¡¨åˆ†æžè¯­å¥
  'ANALYZE TABLE ' || v_ana_tbl_name || ' estimate system statistics';       
  
-ÀýÈç£ºANALYZE TABLE  ICT_SUM_AST_DBT_CUST    ESTIMATE SYSTEM STATISTICS;    
------------²é¿´Ëø¶¨¶ÔÏó¼°»á»°
+ä¾‹å¦‚ï¼šANALYZE TABLE  ICT_SUM_AST_DBT_CUST    ESTIMATE SYSTEM STATISTICS;    
+-----------æŸ¥çœ‹é”å®šå¯¹è±¡åŠä¼šè¯
 SELECT OBJECT_NAME,MACHINE,S.SID,S.SERIAL#
 FROM GV$LOCKED_OBJECT I,DBA_OBJECTS O,GV$SESSION S
 WHERE I.OBJECT_ID=O.OBJECT_ID AND I.SESSION_ID=S.SID;
-----------oralce½âËø
+----------oralceè§£é”
 ALTER SYSTEM KILL SESSION '280,219';
  
-ÊÚÈ¨½Å±¾Éú³É·½·¨£º
-select 'grant select on table dmccrm.'||tbl_name||' to public,ex_sdbods; ' from t_ict_tbl_type where tbl_type in('ALL','GP') and ETL_DIR IN( 'GP->ORACLE','ÎÞÐèÍ¬²½');
+æŽˆæƒè„šæœ¬ç”Ÿæˆæ–¹æ³•ï¼š
+select 'grant select on table dmccrm.'||tbl_name||' to public,ex_sdbods; ' from t_ict_tbl_type where tbl_type in('ALL','GP') and ETL_DIR IN( 'GP->ORACLE','æ— éœ€åŒæ­¥');
 
------------oracleÅúÁ¿Éú³ÉÍ¬Òå´Ê
+-----------oracleæ‰¹é‡ç”ŸæˆåŒä¹‰è¯
 SELECT  'create or replace public synonym '||table_name ||' for iclientodata.'||table_name FROM tabs WHERE  table_name like 'ICT_%'
  
------------oracleÅúÁ¿Éú³ÉÐÞ¸Ä±í×Ö¶ÎµÄ³¤¶È
+-----------oracleæ‰¹é‡ç”Ÿæˆä¿®æ”¹è¡¨å­—æ®µçš„é•¿åº¦
 select 'ALTER TABLE '||TABLE_NAME||' MODIFY '||COLUMN_NAME||' NUMBER(30,8);' from cols t
 where t.DATA_TYPE = 'NUMBER'
   AND T.DATA_SCALE >0 AND SUBSTR(TABLE_NAME,-8,8)<>'20140531'
 
----------oracle ÅúÁ¿´´½¨Í¬Òå´Ê
+---------oracle æ‰¹é‡åˆ›å»ºåŒä¹‰è¯
 select 'create or replace public synonym '||table_name||' for iclientodata.'||table_name||';' from user_tables  WHERE table_name LIKE 'ICT_%'  AND table_name NOT LIKE '%20140531';
 
------------oracle½»»»·ÖÇøÓï¾ä
+-----------oracleäº¤æ¢åˆ†åŒºè¯­å¥
 ALTER TABLE ICT_CUST_LEVEL_HIS ADD PARTITION ICT_PRT_20140531 VALUES LESS THAN ('2014-06-01')
---------MERGEÊ¹ÓÃ·½·¨
+--------MERGEä½¿ç”¨æ–¹æ³•
 MERGE INTO ICT_CUST_INFO_ALL a
 USING 
 (
@@ -114,7 +122,7 @@ ON( a.cust_no= b.cust_no)
 WHEN MATCHED  THEN 
 UPDATE  SET a.MAX_ASSET_INTRO_NO=b.CUST_MNG_UM_NO;
 
--------------oracle Ê÷ÐÎ²éÑ¯£¬²éÑ¯»ú¹¹±àºÅÎª¡®9902¡¯µÄºÍÆäÏÂ¼¶×Ó»ú¹¹
+-------------oracle æ ‘å½¢æŸ¥è¯¢ï¼ŒæŸ¥è¯¢æœºæž„ç¼–å·ä¸ºâ€˜9902â€™çš„å’Œå…¶ä¸‹çº§å­æœºæž„
  select org_id,org_name,org_level from (
        SELECT rownum rn, ioi.org_id , ioi.org_name,ioi.org_level 
            FROM ict_org_info ioi
@@ -123,7 +131,7 @@ UPDATE  SET a.MAX_ASSET_INTRO_NO=b.CUST_MNG_UM_NO;
            order by ioi.org_level desc
       ) where rn=1
       
--------------oracle Ê÷ÐÎ²éÑ¯£¬²éÑ¯»ú¹¹±àºÅÎª¡®9902¡¯µÄºÍÉÏ¼¶»ú¹¹
+-------------oracle æ ‘å½¢æŸ¥è¯¢ï¼ŒæŸ¥è¯¢æœºæž„ç¼–å·ä¸ºâ€˜9902â€™çš„å’Œä¸Šçº§æœºæž„
      
  select org_id,org_name,org_level from (
        SELECT rownum rn, ioi.org_id , ioi.org_name,ioi.org_level 
@@ -133,7 +141,7 @@ UPDATE  SET a.MAX_ASSET_INTRO_NO=b.CUST_MNG_UM_NO;
            order by ioi.org_level desc
       ) where rn=1
       
--------------oracle Ê÷ÐÎ²éÑ¯£¬²éÑ¯»ú¹¹±àºÅÎª¡®9902¡¯µÄÉÏ¼¶»ú¹¹
+-------------oracle æ ‘å½¢æŸ¥è¯¢ï¼ŒæŸ¥è¯¢æœºæž„ç¼–å·ä¸ºâ€˜9902â€™çš„ä¸Šçº§æœºæž„
      
  select org_id,org_name,org_level from (
        SELECT rownum rn, ioi.org_id , ioi.org_name,ioi.org_level 
@@ -143,11 +151,11 @@ UPDATE  SET a.MAX_ASSET_INTRO_NO=b.CUST_MNG_UM_NO;
            order by ioi.org_level desc
       ) where rn=1    
       
-----------²é¿´±íÃûÓë±í¿Õ¼ä
+----------æŸ¥çœ‹è¡¨åä¸Žè¡¨ç©ºé—´
 Select * From user_tables Where table_name = 'ICT_RMT_APPO';
 Select * From User_Tablespaces;
                
-----------²éÑ¯SQL Ô¤¹ÀÊ±¼ä
+----------æŸ¥è¯¢SQL é¢„ä¼°æ—¶é—´
 SELECT SE.SID,
        OPNAME,      
        TRUNC(SOFAR / TOTALWORK * 100, 2) || '%' AS PCT_WORK,       
@@ -160,12 +168,12 @@ WHERE SL.SQL_HASH_VALUE = SA.HASH_VALUE
    AND SOFAR != TOTALWORK
 ORDER BY START_TIME;              
 ------TYPE opty_cur IS REF CURSOR;
-ÕûÌåµÄÒâË¼ÊÇ¡°´´½¨Ò»¸öÀàÐÍ±äÁ¿cur£¬ËüÒýÓÃÓÎ±ê¡±£¬³ýÁËcurÍâ£¬ÆäÓàÈ«ÊÇ¹Ø¼ü×Ö¡£
-TYPE cur£º¶¨ÒåÀàÐÍ±äÁ¿ ,is ref cursor£ºÏàµ±ÓÚÊý¾ÝÀàÐÍ£¬²»¹ýÊÇÒýÓÃÓÎ±êµÄÊý¾ÝÀàÐÍ¡£
-ÕâÖÖ±äÁ¿Í¨³£ÓÃÓÚ´æ´¢¹ý³ÌºÍº¯Êý·µ»Ø½á¹û¼¯Ê±Ê¹ÓÃ£¬
-ÒòÎªPL/SQL²»ÔÊÐí´æ´¢¹ý³Ì»òº¯ÊýÖ±½Ó·µ»Ø½á¹û¼¯£¬
-µ«¿ÉÒÔ·µ»ØÀàÐÍ±äÁ¿£¬ÓÚÊÇÒýÓÃÓÎ±êµÄÀàÐÍ±äÁ¿×÷ÎªÊä³ö²ÎÊý»ò·µ»ØÖµ¾ÍÓ¦ÔË¶øÉúÁË¡£
-----²éÉ±½ø³Ì
+æ•´ä½“çš„æ„æ€æ˜¯â€œåˆ›å»ºä¸€ä¸ªç±»åž‹å˜é‡curï¼Œå®ƒå¼•ç”¨æ¸¸æ ‡â€ï¼Œé™¤äº†curå¤–ï¼Œå…¶ä½™å…¨æ˜¯å…³é”®å­—ã€‚
+TYPE curï¼šå®šä¹‰ç±»åž‹å˜é‡ ,is ref cursorï¼šç›¸å½“äºŽæ•°æ®ç±»åž‹ï¼Œä¸è¿‡æ˜¯å¼•ç”¨æ¸¸æ ‡çš„æ•°æ®ç±»åž‹ã€‚
+è¿™ç§å˜é‡é€šå¸¸ç”¨äºŽå­˜å‚¨è¿‡ç¨‹å’Œå‡½æ•°è¿”å›žç»“æžœé›†æ—¶ä½¿ç”¨ï¼Œ
+å› ä¸ºPL/SQLä¸å…è®¸å­˜å‚¨è¿‡ç¨‹æˆ–å‡½æ•°ç›´æŽ¥è¿”å›žç»“æžœé›†ï¼Œ
+ä½†å¯ä»¥è¿”å›žç±»åž‹å˜é‡ï¼ŒäºŽæ˜¯å¼•ç”¨æ¸¸æ ‡çš„ç±»åž‹å˜é‡ä½œä¸ºè¾“å‡ºå‚æ•°æˆ–è¿”å›žå€¼å°±åº”è¿è€Œç”Ÿäº†ã€‚
+----æŸ¥æ€è¿›ç¨‹
 SELECT dob.OBJECT_NAME Table_Name,
        lo.LOCKED_MODE,
        lo.SESSION_ID,
