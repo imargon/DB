@@ -1699,12 +1699,9 @@ select t1.ab10acid,t4.ad10acno, t1.ab10name, t1.ab10subj,t3.pb10name
 ---- 车城支行调户
 
 select * from ods.adpf10 t1 where t1.ad10acno ='120400125100010310';
-
 select * from ods.aapf20 t2 where t2.aa20acid ='5533830';
 
-select *
-  from rep.d_user_account_change t3
- where t3.zh in ('120400120100013752',
+select *  from rep.d_user_account_change t3 where t3.zh in ('120400120100013752',
 '120400120100013349',
 '120200120100013812',
 '120400120100013760',
@@ -1839,4 +1836,7 @@ select *
 
 select * from rep.d_user_account_change t2 where t2.zgbh ='5007' ;
 select * from rep.d_user_change t1  where t1.zgmc = '陈悦' for update ;
-
+select * from ods.abpf10 t where t.ab10name='彭';
+select t1.rowid,t1.* from ods.capf10 t1 where t1.ca10name = '彭';
+select * from ods.plns_t_fact_loan;
+select * from ods.ulns_customer_info t2 where t2.customername = '彭';
