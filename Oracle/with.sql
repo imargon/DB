@@ -40,8 +40,8 @@ select 'no records' from dual
        and not exists (select s_name from sql2 where rownum=1);
                                                                         
 ---- WITH AS： 就是将一个子查询部分独立出来，有时候是为了提高SQL语句的可读性，有时候是为了提高SQL语句性能。
-----   如果一个SQL语句中，某个表会被访问多次，而且每次访问的限制条件一样的话，就可以使用with as来提高性能。
-----   注意：如果 with as 短语没有被调用2次以上，CBO就不会讲这个短语获取的数据放入temp表，如果想要讲数据放入temp表需要使用materialize hint
-----       如果 with as 短语被调用了2次以上，CBO会自动将 with as 短语的数据放入一个临时表，这个时候不用写materialize hint（执行计划请看下方的连个超链接）
+---- 如果一个SQL语句中，某个表会被访问多次，而且每次访问的限制条件一样的话，就可以使用with as来提高性能。
+---- 如果 with as 短语没有被调用2次以上，CBO就不会讲这个短语获取的数据放入temp表，如果想要讲数据放入temp表需要使用materialize hint
+---- 如果 with as 短语被调用了2次以上，CBO会自动将 with as 短语的数据放入一个临时表，这个时候不用写materialize hint（执行计划请看下方的连个超链接）
                                                                                                   
                                                                         
