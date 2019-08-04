@@ -9,8 +9,12 @@ ORACLE的分区是一种处理超大型表、索引等的技术。分区是一�
 维护方便：如果表的某个分区出现故障，需要修复数据，只修复该分区即可；
 均衡I/O：可以把不同的分区映射到磁盘以平衡I/O，改善整个系统性能；
 改善查询性能：对分区对象的查询可以仅搜索自己关心的分区，提高检索速度。
+（1）改善查询性能：对分区对象的查询可以仅搜索自己关心的分区，提高检索速度；
+（2）方便数据管理：因为分区表的数据存储在多个部分中，所以按分区加载和删除数据比在大表中加载和删除数据更容易；
+（3）方便备份恢复：因为分区比被分区的表要小，所以针对分区的备份和恢复方法要比备份和恢复整个表的方法多。
 缺点：
 分区表相关：已经存在的表没有方法可以直接转化为分区表。不过 Oracle 提供了在线重定义表的功能。
+
 三、Oracle分区方法
 范围分区：
 范围分区就是对数据表中的某个值的范围进行分区，根据某个值的范围，决定将该数据存储在哪个分区上。如根据序号分区，根据业务记录的创建日期进行分区等。
@@ -22,3 +26,32 @@ List分区（列表分区）：
 有时候我们需要根据范围分区后，每个分区内的数据再散列地分布在几个表空间中，这样我们就要使用复合分区。复合分区是先使用范围分区，然后在每个分区内再使用散列分区的一种分区方法（注意：先一定要进行范围分区）
 范围-列表分区（复合分区）：
 范围和列表技术的组合，首先对表进行范围分区，然后用列表技术对每个范围分区再次分区。与组合范围-散列分区不同的是，每个子分区的所有内容表示数据的逻辑子集，由适当的范围和列表分区设置来描述。（注意：先一定要进行范围分区） 
+
+9、与分区相关的表和视图：
+分区 	
+--查询表上有多少分区：SELECT * FROM USER_TAB_PARTITIONS WHERE TABLE_NAME='tableName'
+--显示表分区信息 显示数据库所有分区表的详细分区信息：select * from DBA_TAB_PARTITIONS
+--显示当前用户可访问的所有分区表的详细分区信息：select * from ALL_TAB_PARTITIONS
+--显示当前用户所有分区表的详细分区信息：select * from USER_TAB_PARTITIONS
+子分区 	
+--显示子分区信息 显示数据库所有组合分区表的子分区信息：select * from DBA_TAB_SUBPARTITIONS
+--显示当前用户可访问的所有组合分区表的子分区信息：select * from ALL_TAB_SUBPARTITIONS
+--显示当前用户所有组合分区表的子分区信息：select * from USER_TAB_SUBPARTITIONS
+分区表 	
+--显示数据库所有分区表的信息：select * from DBA_PART_TABLES where table_name=upper('dinya_test')
+--显示当前用户可访问的所有分区表信息:select * from ALL_PART_TABLES
+--显示当前用户所有分区表的信息：select * from USER_PART_TABLES
+分区列 	
+--显示分区列 显示数据库所有分区表的分区列信息：select * from DBA_PART_KEY_COLUMNS
+--显示当前用户可访问的所有分区表的分区列信息：select * from ALL_PART_KEY_COLUMNS
+--显示当前用户所有分区表的分区列信息：select * from USER_PART_KEY_COLUMNS 
+子分区列 	
+--显示子分区列 显示数据库所有分区表的子分区列信息：select * from DBA_SUBPART_KEY_COLUMNS
+--显示当前用户可访问的所有分区表的子分区列信息：select * from ALL_SUBPART_KEY_COLUMNS
+--显示当前用户所有分区表的子分区列信息：select * from USER_SUBPART_KEY_COLUMNS
+特例 	
+
+--查询出oracle数据库中所有的的分区表：
+select * from user_tables a where a.partitioned='YES'
+
+--删除一个表的数据是
