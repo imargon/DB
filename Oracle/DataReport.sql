@@ -1,8 +1,16 @@
-
 1.分析函数和聚合函数的不同之处
 普通的聚合函数用group by分组，每个分组返回一个统计值，而分析函数采用partition by分组，并且每组每行都可以返回一个统计值。
 
 2.分析函数
+2.1 开窗函数指定了分析函数工作的数据窗口大小，这个数据窗口大小可能会随着行的变化而变化，
+oracle开窗函数使用的话一般是和order、partition by、row_number()、rank()、dense_rank()几个函数一起使用
+2.2 over函数和row_number一起使用：
+开窗函数和row_number函数一起使用的话，就是返回一行，不过这里其实不适合用来统计，因为统计成绩的话，可以存在分数一样的两条数据，而row_number只返回一条数据。
+2.3 over函数和rank一起使用：
+rank函数功能也是排序，这里的话，假如有分数一样的两条数据的情况，是会返回两条的，但是假如第二名，就是从3开始计算了
+2.4 over函数和dense_rank一起使用：
+dense_rank函数是rank函数的补充，假如有分数一样的两条数据，是可以按照正常排序，第二名的情况，还是显示2
+
 分析函数带有一个开窗函数over()，包含三个分析子句:分组(partition by), 排序(order by), 窗口(rows) ，
 使用形式如下：over(partition by xxx order by yyy rows between zzz)。
  
