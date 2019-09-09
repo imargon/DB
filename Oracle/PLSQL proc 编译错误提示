@@ -15,3 +15,7 @@ Recompile过后，可以在存储过程上，右键-编辑
 方法四：
 Tools-Compile Invalid Objects
 也可以对所有的失效对象进行编译。
+
+--- 字符编码查看
+select userenv('language') from dual;      
+select * from V$NLS_PARAMETERS;
