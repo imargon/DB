@@ -1,6 +1,10 @@
 # https://mp.weixin.qq.com/s?__biz=MzI4NTA1MDEwNg==&mid=2650776522&idx=1&sn=fe54153d42d8cb8488144d504ab692c9&chksm=f3f9165fc48e9f494334b54bd92bcdddfb55d38ca96606611642b329826d9ec25de5fc370094&mpshare=1&scene=24&srcid=0909tfl40BpRUi44egpp2z4W&sharer_sharetime=1567986429354&sharer_shareid=18c0744f56f97c63289cd92627040bad&pass_ticket=wVGTaW2Lyrkv3a%2FzT3gT7fi7fgDN9LQPo44MFIA0p7WxKUXDSxMGHy%2Bm%2FanafHdO#rd
 # https://mp.weixin.qq.com/s?__biz=MzI4NTA1MDEwNg==&mid=2650773695&idx=1&sn=2a51c212b59fd53ed8341f2c9d38e794&chksm=f3f92d2ac48ea43ca113d576fd66c3af0af8931d943b4a18659ad88a2c583e08e250cb16ee0e&mpshare=1&scene=24&srcid=0909ScWoa3YsJZ1IysISn6qw&sharer_sharetime=1567989393702&sharer_shareid=18c0744f56f97c63289cd92627040bad&pass_ticket=wVGTaW2Lyrkv3a%2FzT3gT7fi7fgDN9LQPo44MFIA0p7WxKUXDSxMGHy%2Bm%2FanafHdO#rd
+# https://mp.weixin.qq.com/s?__biz=MzI4NTA1MDEwNg==&mid=2650777147&idx=1&sn=be91d90601290f5043df6e3f051c6ece&chksm=f3f913aec48e9ab8b30726c5b8a38cf6fdf49e97d8f1814853c7b19a33f9c0baf68ab8a1fc1d&mpshare=1&scene=24&srcid=0909C82xOVoeqzbGIzHdr9S4&sharer_sharetime=1567986283647&sharer_shareid=18c0744f56f97c63289cd92627040bad&pass_ticket=wVGTaW2Lyrkv3a%2FzT3gT7fi7fgDN9LQPo44MFIA0p7WxKUXDSxMGHy%2Bm%2FanafHdO#rd
 
+MySQL软优化与硬优化
+19条MySQL优化
+数据类型、索引、查询的MySQL优化技巧
 1、EXPLAIN
 
 做MySQL优化，我们要善用EXPLAIN查看SQL执行计划。
