@@ -40,6 +40,20 @@ SELECT E.DEPTNO,
        OVER(PARTITION BY E.DEPTNO  ORDER BY E.SAL ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) MAX_SAL 
  FROM EMP E;
  
+SELECT E.DEPTNO,
+       E.EMPNO,
+       E.ENAME,
+       E.SAL,
+       ROW_NUMBER() over(partition by E.DEPTNO order by E.SAL) sal_order_id
+  FROM EMP E;
+
+SELECT E.DEPTNO,
+       E.EMPNO,
+       E.ENAME,
+       E.SAL,
+       SUM(E.SAL) over(partition by E.DEPTNO order by E.SAL) sal_order_id
+  FROM EMP E;
+
 4. 常用统计函数
 row_number() over(partition by ... order by ...)
 rank() over(partition by ... order by ...)
