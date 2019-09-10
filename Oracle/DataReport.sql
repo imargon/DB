@@ -38,7 +38,7 @@ SELECT E.DEPTNO,
        E.SAL,
        LAST_VALUE(E.SAL) 
        OVER(PARTITION BY E.DEPTNO  ORDER BY E.SAL ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) MAX_SAL 
- FROM EMP E;
+ FROM EMP E; 
 
 SELECT E.DEPTNO,
        E.EMPNO,
@@ -65,3 +65,59 @@ first_value() over(partition by ... order by ...)
 last_value() over(partition by ... order by ...)
 lag() over(partition by ... order by ...)
 lead() over(partition by ... order by ...)
+
+
+--- 窗口函数 last_value() over( partition by .. order by .. rows)
+
+select * from  hr.countries;
+select * from  hr.employees;
+select * from tabs;
+ 
+
+ --- 1.grouping sets
+ --- (类似与同时分组统计,union all) 求各部门 和各岗位的平均工资 
+ select t1.job, t1.deptno, round(avg(sal), 2)
+   from emp t1
+  group by grouping sets(t1.job, t1.deptno);
+
+ select t1.job, t1.deptno, sum(sal)
+   from emp t1
+  group by grouping sets(t1.job, t1.deptno);
+
+ ---2.rollup 
+ ---(按照分组条件先后分组，再统计)  各部门，各岗位sal 合计
+ ---如果使用group by rollup(a,b)，首先会对(a,b)进行group by ，然后对 a 进行 group by ，最后对全表进行 group by 操作。
+ select * from scott.emp;
+ Select deptno, job, sum(sal) from emp group by rollup(deptno, job);
+ Select deptno, job, round(avg(sal),2) from emp group by rollup(deptno, job);
+
+ --- 3.cube
+ --- 各部门岗位薪水合计和岗位薪水合计
+ --- 如果使用group by cube(a,b),，则首先会对(a,b)进行group by，然后依次是(a)，(b)，最后对全表进行group by 操作，一共是2^2=4次grouping
+ --- rollup 与group by union all
+ Select deptno,job,sum(sal) from emp group by cube(deptno,job);
+ 
+ 
+ ---4.grouping()
+ --- 使用grouping可以判断该行是数据库中本来的行，还是有统计产生的行，
+ --- grouping值为0时说明这个值是数据库中本来的值，为1说明是统计的结果，参数只有一个,而且必须为group by中出现的某一列
+ select deptno, job, sum(sal), grouping(deptno), grouping(job)
+   from emp
+  group by rollup(deptno, job);
+
+ --- 5.Grouping_id()
+ --- 其返回值其实就是参数中的每列的grouping()值的二进制向量，如果grouping(a)=1，grouping(b)=1，则grouping_id(A,B)的返回值就是二进制的11，转成10进制就是3。
+ --- 参数可以是多个，但必须为group by中出现的列。
+ select deptno,
+        job,
+        sum(sal),
+        grouping(deptno),
+        grouping(job) ，grouping_id(deptno, job)
+   from emp
+  group by rollup(deptno, job);
+
+---6.GROUP_ID()唯一标识重复组，可以通过group_id去除重复组
+   select deptno, job, sum(sal), group_id()
+     from emp
+    group by deptno, rollup(deptno, job)
+   having group_id() = 0;
