@@ -39,19 +39,17 @@ SELECT E.DEPTNO,
        LAST_VALUE(E.SAL) 
        OVER(PARTITION BY E.DEPTNO  ORDER BY E.SAL ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) MAX_SAL 
  FROM EMP E;
- 
-SELECT E.DEPTNO,
-       E.EMPNO,
-       E.ENAME,
-       E.SAL,
-       ROW_NUMBER() over(partition by E.DEPTNO order by E.SAL) sal_order_id
-  FROM EMP E;
 
 SELECT E.DEPTNO,
        E.EMPNO,
        E.ENAME,
        E.SAL,
-       SUM(E.SAL) over(partition by E.DEPTNO order by E.SAL) sal_order_id
+       row_number() over(partition by E.DEPTNO order by E.SAL ) max_sal,
+       max(E.SAL) over(partition by E.DEPTNO order by E.SAL ) sal_order_id,
+       SUM(E.SAL) over(partition by E.DEPTNO order by E.SAL ) sal_order_id,
+       SUM(E.SAL) over(partition by E.DEPTNO order by E.SAL ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) sal_order_id,
+       FIRST_VALUE(E.SAL) OVER(PARTITION BY E.DEPTNO  ORDER BY E.SAL ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) Min_SAL ,
+       lead(E.SAL) OVER(PARTITION BY E.DEPTNO  ORDER BY E.SAL ) lead_SAL 
   FROM EMP E;
 
 4. 常用统计函数
